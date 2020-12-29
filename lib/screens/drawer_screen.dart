@@ -61,55 +61,6 @@ class _DrawerScreenState extends State<DrawerScreen> {
               ],
             ),
           ),
-          FlatButton(
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => HomeScreen()));
-            },
-            padding: EdgeInsets.symmetric(vertical: 15),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.home,
-                  size: 40,
-                  color: Colors.white,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Text(
-                    'Home',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-          FlatButton(
-            onPressed: () {},
-            padding: EdgeInsets.symmetric(vertical: 15),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.add,
-                  size: 40,
-                  color: Colors.white,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Text(
-                    'Add Member',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
           Padding(
             padding: const EdgeInsets.only(bottom: 40.0),
             child: FlatButton(
