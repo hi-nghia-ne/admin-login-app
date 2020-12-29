@@ -11,7 +11,7 @@ class _SearchBarState extends State<SearchBar> {
     return Container(
       width: 350,
       alignment: Alignment.center,
-      margin: EdgeInsets.only(bottom: 30),
+      margin: EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         color: Colors.white,

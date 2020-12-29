@@ -1,6 +1,5 @@
-import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_project_1/screens/login_screen.dart';
+import 'package:flutter_project_1/screens/splash_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -19,14 +18,7 @@ class MyApp extends StatelessWidget {
       //   resizeToAvoidBottomInset: false,
       //   body: LoginScreen(),
       // ),
-      home: AnimatedSplashScreen(
-        splash: 'assets/images/profile_image.png',
-        nextScreen: Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: LoginScreen(),
-        ),
-        splashTransition: SplashTransition.scaleTransition,
-      ),
+      home: SplashScreen(),
     );
   }
 }

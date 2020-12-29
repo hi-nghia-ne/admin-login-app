@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 
 class PrimaryButton extends StatefulWidget {
   final String btnText;
-  
-  PrimaryButton({this.btnText});
+  final VoidCallback onCustomPressed;
+
+  PrimaryButton({
+    this.btnText,
+    this.onCustomPressed,
+  });
 
   @override
   _PrimaryButtonState createState() => _PrimaryButtonState();
@@ -22,7 +26,7 @@ class _PrimaryButtonState extends State<PrimaryButton> {
         left: 30,
       ),
       child: RaisedButton(
-        onPressed: () {},
+        onPressed: widget.onCustomPressed,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
         ),

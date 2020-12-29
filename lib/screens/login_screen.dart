@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project_1/screens/home_screen.dart';
-import 'package:flutter_project_1/widgets/primary_button.dart';
 import 'package:flutter_project_1/widgets/password_field.dart';
+import 'package:flutter_project_1/widgets/primary_button.dart';
 import 'package:flutter_project_1/widgets/username_field.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -11,6 +12,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  bool isLoggedIn = false;
   final _formKey = GlobalKey<FormState>();
 
   int _pageState = 0;
@@ -27,6 +29,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
+    super.initState();
+    autoLogIn();
     KeyboardVisibilityNotification().addNewListener(
       onChange: (bool visible) {
         setState(() {
@@ -34,6 +38,30 @@ class _LoginScreenState extends State<LoginScreen> {
         });
       },
     );
+  }
+
+  void autoLogIn() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final bool isLogined = await prefs.getBool('loginState') ?? false;
+
+    if (isLogined) {
+      setState(() {
+        isLoggedIn = true;
+      });
+      return;
+    }
+  }
+
+  Future<Null> loginUser() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('loginState', true);
+
+    setState(() {
+      isLoggedIn = true;
+    });
+
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => HomeScreen()));
   }
 
   @override
@@ -118,54 +146,19 @@ class _LoginScreenState extends State<LoginScreen> {
                   image: AssetImage('assets/images/splash_bg.png'),
                 ),
               ),
-              Container(
-                width: windowWidth,
-                height: 60,
-                alignment: Alignment.center,
-                margin: EdgeInsets.only(
-                  bottom: 50,
-                  right: 30,
-                  left: 30,
-                ),
-                child: RaisedButton(
-                  onPressed: () {
+              PrimaryButton(
+                btnText: 'Get Started',
+                onCustomPressed: () {
                     setState(() {
-                      _pageState = 1;
+                      !isLoggedIn
+                          ? _pageState = 1
+                          : Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomeScreen()));
                     });
                   },
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  padding: EdgeInsets.all(0),
-                  child: Container(
-                    width: double.infinity,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        gradient: LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: [Color(0xFFB94D59), Color(0xFFCA9661)],
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.3),
-                            spreadRadius: 0,
-                            blurRadius: 5,
-                            offset: Offset(0, 3),
-                          ),
-                        ]),
-                    child: Text(
-                      'Get Started',
-                      style: TextStyle(
-                        fontSize: 23,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              )
+              ),
             ],
           ),
         ),
@@ -189,9 +182,10 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           child: Container(
             width: double.infinity,
-            child: SingleChildScrollView(
-              child: Form(
-                key: _formKey,
+            child: Form(
+              key: _formKey,
+              child: SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -210,61 +204,19 @@ class _LoginScreenState extends State<LoginScreen> {
                     SizedBox(
                       height: windowHeight - 660,
                     ),
-                    // PrimaryButton(
-                    //   btnText: 'Login',
-                    // ),
-                    Container(
-                      // width: windowWidth,
-                      height: 60,
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.only(
-                        bottom: 50,
-                        right: 30,
-                        left: 30,
-                      ),
-                      child: RaisedButton(
-                        onPressed: () {
-                          if (_formKey.currentState.validate()) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => HomeScreen(),
-                              ),
-                            );
-                          }
-                        },
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        padding: EdgeInsets.all(0),
-                        child: Container(
-                          width: double.infinity,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              gradient: LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: [Color(0xFFB94D59), Color(0xFFCA9661)],
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.3),
-                                  spreadRadius: 0,
-                                  blurRadius: 5,
-                                  offset: Offset(0, 3),
-                                ),
-                              ]),
-                          child: Text(
-                            'Login',
-                            style: TextStyle(
-                              fontSize: 23,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
+                    PrimaryButton(
+                      btnText: 'Login',
+                      onCustomPressed: () {
+                        if (_formKey.currentState.validate()) {
+                          loginUser();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HomeScreen(),
                             ),
-                          ),
-                        ),
-                      ),
+                          );
+                        }
+                      },
                     ),
                   ],
                 ),

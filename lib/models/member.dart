@@ -5,6 +5,7 @@ class Member {
   final String name;
   final String phoneNumber;
   final String description;
+  bool isLike;
 
   Member({
     this.avatarUrl,
